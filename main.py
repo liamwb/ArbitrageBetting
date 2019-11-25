@@ -44,10 +44,17 @@ class Game:
 
 # now a function to find the lowest combinedMM for several sets of odds on the same game
 # (but different Game objects!)
-
 def findLeastCMM(*games):
-    for i in games:
-        print(i.bettingAgency)
-    return
+    lowestCMM = 1
+    bettingAgencyA = ""
+    bettingAgencyB = ""
 
+    for i in games:
+        for j in games:
+            if i.impliedOddsA + j.impliedOddsB < lowestCMM:
+                lowestCMM = i.impliedOddsA + j.impliedOddsB
+                bettingAgencyA = i.bettingAgency
+                bettingAgencyB = j.bettingAgency
+
+    return [bettingAgencyA, bettingAgencyB, lowestCMM]
 
