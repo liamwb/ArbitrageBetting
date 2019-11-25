@@ -23,3 +23,10 @@ def combinedMarketMargin(odds1, odds2):
 def profit(investment, combinedMarketMargin):
     return (investment / combinedMarketMargin) - investment
 
+# To calculate how much to stake on each side of the arbitrage bet, the following formula is used:
+#
+# Individual bets = (Investment x Individual implied odds) / combined market margin
+
+def individualBet(investment, individualImpliedOdds, combinedMarketMargin):
+    return (investment * individualImpliedOdds) / combinedMarketMargin
+
