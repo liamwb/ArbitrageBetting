@@ -15,3 +15,11 @@ def combinedMarketMargin(odds1, odds2):
     return (1 / odds1) + (1 / odds2)
 
 
+# If there is an arbitrage opportunity, then to calculate the profit for a
+# given investment the following formula is used:
+#
+# Profit = (Investment / combined market margin) – Investment
+
+def profit(investment, combinedMarketMargin):
+    return (investment / combinedMarketMargin) - investment
+
