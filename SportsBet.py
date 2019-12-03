@@ -14,5 +14,17 @@ url = input("input Sportsbet url: ")
 driver.get(url)
 content = driver.page_source
 soup = bs4.BeautifulSoup(content, features="html.parser")  # soup now contains the html behind url
-# for i in re.findall("li", soup.body.prettify()):#soup.find_all("li") is a list of all the <li> tags in the soup
+for i in soup.select('ul > div > ul > li'): # the tags containing the data for each game are in this structure
+    i = str(i)
+
+    # find teamA
+    teamAStartIndex = i.find("event-participant-1") + 21 # 21 because "event-participant-1" is 19 characters, and then there's a " and a >
+    teamAEndIndex = i[teamAStartIndex:].find(r"<span") + teamAStartIndex -1
+    teamA.append(i[teamAStartIndex:teamAEndIndex])
+
+    # find teamB
+
+    # find oddsA
+
+    # find oddsB
 
