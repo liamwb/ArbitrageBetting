@@ -3,9 +3,11 @@
 # I have started by following this tutorial: https://www.edureka.co/blog/web-scraping-with-python/
 
 import re # it's regex
+from typing import List
+
 from selenium import webdriver  # selenium is for accessing webpages
 import bs4  # BeautifulSoup is for data from websites
-import pandas  # pandas is for data analysis
+import main
 
 driver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
 teamA = []; teamB = []; oddsA = []; oddsB = []  # Arrays for data
@@ -23,7 +25,7 @@ def fillArrays():
         # find teamA
         teamAStartIndex = i.find("event-participant-1") + 21
         # 21 because "event-participant-1" is 19 characters, and then there's a " and a >
-        teamAEndIndex = i[teamAStartIndex:].find("</span") + teamAStartIndex
+        teamAEndIndex = i[teamAStartIndex:].find("<span") + teamAStartIndex
         teamA.append(i[teamAStartIndex:teamAEndIndex])
 
         # find oddsA
@@ -44,10 +46,29 @@ def fillArrays():
 
 
 def convertOddsArrayToFloats(array):
-    for i in array:
+    tempArray = []
+    for i in range(0, len(array)):
         try:
-            i = float(i)
+            tempArray.append(float(array[i]))
         except ValueError:
-            i = 0.00
-            print("Betting has been suspended for one game")
-        # If betting has been suspended then weird shit shows up where the odds usually are
+            tempArray.append(0.00)
+    return tempArray
+
+
+def createGameObjects():
+    gameObjects = []
+    for i in range(0, len(teamA)):
+        gameObjects.append(
+            main.Game("sportsbet", teamA[i], teamB[i], oddsA[i], oddsB[i])
+        )
+    return gameObjects
+
+
+
+
+
+
+fillArrays()
+oddsA = convertOddsArrayToFloats(oddsA)
+oddsB = convertOddsArrayToFloats(oddsB)
+gameObjects = createGameObjects()
