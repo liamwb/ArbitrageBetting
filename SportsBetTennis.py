@@ -8,7 +8,10 @@ from selenium import webdriver  # selenium is for accessing webpages
 import main
 
 driver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
-teamA = []; teamB = []; oddsA = []; oddsB = []  # Arrays for data
+teamA = [];
+teamB = [];
+oddsA = [];
+oddsB = []  # Arrays for data
 
 url = input("input Sportsbet url: ")
 driver.get(url)
@@ -49,7 +52,9 @@ def convertOddsArrayToFloats(array):
         try:
             tempArray.append(float(array[i]))
         except ValueError:
-            tempArray.append(0.00)
+            tempArray.append(-1)
+            # a negative number will indicate that the odds are in some way out of order,
+            # and will be easy to eliminate later
     return tempArray
 
 
@@ -60,10 +65,6 @@ def createGameObjects():
             main.Game("sportsbet", teamA[i], teamB[i], oddsA[i], oddsB[i])
         )
     return gameObjects
-
-
-
-
 
 
 fillArrays()
