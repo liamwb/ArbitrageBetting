@@ -5,8 +5,6 @@
 import bs4  # BeautifulSoup is for data from websites
 from selenium import webdriver  # selenium is for accessing webpages
 
-import main
-
 
 def getSoup(driver):
     url = "https://www.sportsbet.com.au/betting/sports-home/tennis"

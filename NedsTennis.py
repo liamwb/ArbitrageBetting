@@ -2,28 +2,21 @@
 
 import bs4  # BeautifulSoup is for data from websites
 from selenium import webdriver  # selenium is for accessing webpages
-import main
-
-class Game:
-    def __init__(self, bettingAgency, teamA, teamB, oddsA, oddsB, ):
-        self.bettingAgency = bettingAgency
-        self.teamA = teamA
-        self.teamB = teamB
-        self.oddsA = oddsA
-        self.oddsB = oddsB
-        self.impliedOddsA = 1 / oddsA
-        self.impliedOddsB = 1 / oddsB
 
 
-driver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
-teamA = []; teamB = []; oddsA = []; oddsB = []  # Arrays for data
+def getSoup(driver):
+    url = "https://www.neds.com.au/sports/tennis"
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, features="html.parser")  # soup now contains the html behind url
+    return soup
 
-url = input("input Neds url: ")
-driver.get(url)
-content = driver.page_source
-soup = bs4.BeautifulSoup(content, features="html.parser")  # soup now contains the html behind url
 
-def fillArrays():
+def fillArrays(soup):
+    teamA = []
+    teamB = []
+    oddsA = []
+    oddsB = []  # Arrays for data
     pbnArray = soup.find_all(class_="price-button-name")
     # every even index is the name of a teamA, and vice-versa for the odd indicies
 
@@ -49,24 +42,11 @@ def fillArrays():
     #                             [2]     to get to the right bit
     #                                [0:4] for just the x.xx odds
 
-    for i in range (0, len(oddsArray)):
+    for i in range(0, len(oddsArray)):
         if i % 2 == 0:
             oddsA.append(float(str(oddsArray[i]).split(">")[2][0:4]))
         elif i % 2 == 1:
             oddsB.append(float(str(oddsArray[i]).split(">")[2][0:4]))
 
+    return oddsA, oddsB, teamA, teamB
 
-# This function is the same as the one in SportsBetTennis
-def createGameObjects():
-    gameObjects = []
-    for i in range(0, len(teamA)):
-        gameObjects.append(Game("neds", teamA[i], teamB[i], oddsA[i], oddsB[i]))
-    return gameObjects
-
-fillArrays()
-gameObjects = [] # I have no clue why but it doesn't work if this line isn't here
-gameObjects = createGameObjects()
-
-
-for i in gameObjects:
-    print(i.bettingAgency + " " + i.teamA + " vs " + i.teamB + " at " + str(i.oddsA) + " to " + str(i.oddsB))

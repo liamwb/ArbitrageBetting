@@ -8,7 +8,7 @@ import bs4  # BeautifulSoup is for data from websites
 from selenium import webdriver  # selenium is for accessing webpages
 
 # Variables
-driver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
+myDriver= webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
 allGameObjects = []
 
 # Functions:
@@ -79,12 +79,22 @@ def findLeastCMM(*games):
 
 # the url for SportsbetTennis is https://www.sportsbet.com.au/betting/sports-home/tennis
 
-def scrapeSportsbet():
-    soup = SportsBetTennis.getSoup(driver)
-    print(soup)
+def scrapeSportsBetTennis():
+    soup = SportsBetTennis.getSoup(myDriver)
     oddsA, oddsB, teamA, teamB = SportsBetTennis.fillArrays(soup)
-    print(oddsA, oddsB, teamA, teamB)
     oddsA = SportsBetTennis.convertOddsArrayToFloats(oddsA)
     oddsB = SportsBetTennis.convertOddsArrayToFloats(oddsB)
     gameObjects = createGameObjects(oddsA, oddsB, teamA, teamB, "sportsbet")
     return gameObjects
+
+def scrapeNedsTennis():
+    soup = NedsTennis.getSoup(myDriver)
+    oddsA, oddsB, teamA, teamB = NedsTennis.fillArrays(soup)
+    gameObjects = createGameObjects(oddsA, oddsB, teamA, teamB, "neds")
+    return gameObjects
+
+allGameObjects.extend(scrapeNedsTennis())
+allGameObjects.extend(scrapeSportsBetTennis())
+
+for i in allGameObjects:
+    print(i.teamA + " vs " + i.teamB + " at " + str(i.oddsA) + " vs " + str(i.oddsB) + " through " + i.bettingAgency)
