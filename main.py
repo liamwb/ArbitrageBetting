@@ -2,7 +2,17 @@
 # By Liam Wood-Baker, 2019
 
 
+import NedsTennis
+import SportsBetTennis
+import bs4  # BeautifulSoup is for data from websites
+from selenium import webdriver  # selenium is for accessing webpages
+
+# Variables
+driver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
+allGameObjects = []
+
 # Functions:
+
 def impliedOdds(odds):
     return 1 / odds
 
@@ -42,6 +52,14 @@ class Game:
         self.impliedOddsA = 1 / oddsA
         self.impliedOddsB = 1 / oddsB
 
+def createGameObjects(oddsA, oddsB, teamA, teamB, bettingAgency):
+    gameObjects = []
+    for i in range(0, len(teamA)):
+        gameObjects.append(
+            Game(bettingAgency, teamA[i], teamB[i], oddsA[i], oddsB[i])
+        )
+    return gameObjects
+
 # now a function to find the lowest combinedMM for several sets of odds on the same game
 # (but different Game objects!)
 def findLeastCMM(*games):
@@ -58,3 +76,15 @@ def findLeastCMM(*games):
 
     return [bettingAgencyA, bettingAgencyB, lowestCMM]
 
+
+# the url for SportsbetTennis is https://www.sportsbet.com.au/betting/sports-home/tennis
+
+def scrapeSportsbet():
+    soup = SportsBetTennis.getSoup()
+    print(soup)
+    oddsA, oddsB, teamA, teamB = SportsBetTennis.fillArrays(soup)
+    print(oddsA, oddsB, teamA, teamB)
+    oddsA = SportsBetTennis.convertOddsArrayToFloats(oddsA)
+    oddsB = SportsBetTennis.convertOddsArrayToFloats(oddsB)
+    gameObjects = createGameObjects(oddsA, oddsB, teamA, teamB, "sportsbet")
+    allGameObjects.extend(gameObjects)

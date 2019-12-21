@@ -4,6 +4,17 @@ import bs4  # BeautifulSoup is for data from websites
 from selenium import webdriver  # selenium is for accessing webpages
 import main
 
+class Game:
+    def __init__(self, bettingAgency, teamA, teamB, oddsA, oddsB, ):
+        self.bettingAgency = bettingAgency
+        self.teamA = teamA
+        self.teamB = teamB
+        self.oddsA = oddsA
+        self.oddsB = oddsB
+        self.impliedOddsA = 1 / oddsA
+        self.impliedOddsB = 1 / oddsB
+
+
 driver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
 teamA = []; teamB = []; oddsA = []; oddsB = []  # Arrays for data
 
@@ -49,7 +60,7 @@ def fillArrays():
 def createGameObjects():
     gameObjects = []
     for i in range(0, len(teamA)):
-        gameObjects.append(main.Game("neds", teamA[i], teamB[i], oddsA[i], oddsB[i]))
+        gameObjects.append(Game("neds", teamA[i], teamB[i], oddsA[i], oddsB[i]))
     return gameObjects
 
 fillArrays()

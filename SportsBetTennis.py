@@ -7,19 +7,36 @@ from selenium import webdriver  # selenium is for accessing webpages
 
 import main
 
+
+class Game:
+    def __init__(self, bettingAgency, teamA, teamB, oddsA, oddsB, ):
+        self.bettingAgency = bettingAgency
+        self.teamA = teamA
+        self.teamB = teamB
+        self.oddsA = oddsA
+        self.oddsB = oddsB
+        self.impliedOddsA = 1 / oddsA
+        self.impliedOddsB = 1 / oddsB
+
+
 driver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
-teamA = []
-teamB = []
-oddsA = []
-oddsB = []  # Arrays for data
-
-url = input("input Sportsbet url: ")
-driver.get(url)
-content = driver.page_source
-soup = bs4.BeautifulSoup(content, features="html.parser")  # soup now contains the html behind url
 
 
-def fillArrays():
+def getSoup():
+    url = "https://www.sportsbet.com.au/betting/sports-home/tennis"
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, features="html.parser")  # soup now contains the html behind url
+    return soup
+
+
+
+def fillArrays(soup):
+    teamA = []
+    teamB = []
+    oddsA = []
+    oddsB = []  # Arrays for data
+
     for i in soup.select('ul > div > ul > li'):  # the tags containing the data for each game are in this structure
         i = str(i)
 
@@ -45,6 +62,8 @@ def fillArrays():
         oddsBStartIndex = i[oddsAStartIndex:].find("price-text") + oddsAStartIndex + 12
         oddsB.append(i[oddsBStartIndex: oddsBStartIndex + 4])
 
+    return oddsA, oddsB, teamA, teamB
+
 
 def convertOddsArrayToFloats(array):
     tempArray = []
@@ -58,19 +77,12 @@ def convertOddsArrayToFloats(array):
     return tempArray
 
 
-def createGameObjects():
+def createGameObjects(oddsA, oddsB, teamA, teamB):
     gameObjects = []
     for i in range(0, len(teamA)):
         gameObjects.append(
-            main.Game("sportsbet", teamA[i], teamB[i], oddsA[i], oddsB[i])
+            Game("sportsbet", teamA[i], teamB[i], oddsA[i], oddsB[i])
         )
     return gameObjects
 
 
-fillArrays()
-oddsA = convertOddsArrayToFloats(oddsA)
-oddsB = convertOddsArrayToFloats(oddsB)
-gameObjects = createGameObjects()
-
-for i in gameObjects:
-    print(i.bettingAgency + i.teamA + " vs " + i.teamB + " at " + str(i.oddsA) + " to " + str(i.oddsB))
