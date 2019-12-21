@@ -87,4 +87,4 @@ def scrapeSportsbet():
     oddsA = SportsBetTennis.convertOddsArrayToFloats(oddsA)
     oddsB = SportsBetTennis.convertOddsArrayToFloats(oddsB)
     gameObjects = createGameObjects(oddsA, oddsB, teamA, teamB, "sportsbet")
-    allGameObjects.extend(gameObjects)
+    return gameObjects
