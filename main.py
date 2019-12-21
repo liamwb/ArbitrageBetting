@@ -80,7 +80,7 @@ def findLeastCMM(*games):
 # the url for SportsbetTennis is https://www.sportsbet.com.au/betting/sports-home/tennis
 
 def scrapeSportsbet():
-    soup = SportsBetTennis.getSoup()
+    soup = SportsBetTennis.getSoup(driver)
     print(soup)
     oddsA, oddsB, teamA, teamB = SportsBetTennis.fillArrays(soup)
     print(oddsA, oddsB, teamA, teamB)

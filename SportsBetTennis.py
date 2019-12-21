@@ -8,21 +8,7 @@ from selenium import webdriver  # selenium is for accessing webpages
 import main
 
 
-class Game:
-    def __init__(self, bettingAgency, teamA, teamB, oddsA, oddsB, ):
-        self.bettingAgency = bettingAgency
-        self.teamA = teamA
-        self.teamB = teamB
-        self.oddsA = oddsA
-        self.oddsB = oddsB
-        self.impliedOddsA = 1 / oddsA
-        self.impliedOddsB = 1 / oddsB
-
-
-driver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
-
-
-def getSoup():
+def getSoup(driver):
     url = "https://www.sportsbet.com.au/betting/sports-home/tennis"
     driver.get(url)
     content = driver.page_source
@@ -75,14 +61,4 @@ def convertOddsArrayToFloats(array):
             # a negative number will indicate that the odds are in some way out of order,
             # and will be easy to eliminate later
     return tempArray
-
-
-def createGameObjects(oddsA, oddsB, teamA, teamB):
-    gameObjects = []
-    for i in range(0, len(teamA)):
-        gameObjects.append(
-            Game("sportsbet", teamA[i], teamB[i], oddsA[i], oddsB[i])
-        )
-    return gameObjects
-
 
