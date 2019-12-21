@@ -8,9 +8,9 @@ from selenium import webdriver  # selenium is for accessing webpages
 import main
 
 driver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
-teamA = [];
-teamB = [];
-oddsA = [];
+teamA = []
+teamB = []
+oddsA = []
 oddsB = []  # Arrays for data
 
 url = input("input Sportsbet url: ")
