@@ -10,6 +10,8 @@ from selenium import webdriver  # selenium is for accessing webpages
 # Variables
 myDriver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
 allGameObjects = []
+allCommonGames = []
+orderedArbitrages = []
 
 
 # Classes:
@@ -86,10 +88,6 @@ def createGameObjects(oddsA, oddsB, teamA, teamB, bettingAgency):
     return gameObjects
 
 
-# now a function to find the lowest combinedMM for several sets of odds on the same game
-# (but different Game objects!)
-
-
 # the url for SportsbetTennis is https://www.sportsbet.com.au/betting/sports-home/tennis
 
 def scrapeSportsBetTennis():
@@ -109,12 +107,9 @@ def scrapeNedsTennis():
     gameObjects = createGameObjects(oddsA, oddsB, teamA, teamB, "neds")
     return gameObjects
 
-
+# filling allGameObjects
 allGameObjects.extend(scrapeNedsTennis())
 allGameObjects.extend(scrapeSportsBetTennis())
-
-for i in allGameObjects:
-    print(i.teamA + " vs " + i.teamB + " at " + str(i.oddsA) + " vs " + str(i.oddsB) + " through " + i.bettingAgency)
 
 
 def findGamesInCommon(gameObjects):
@@ -150,7 +145,6 @@ allCommonGames = findGamesInCommon(allGameObjects)
 
 def arrangeByCMM(gamesInCommon):
     possibleArbitrages = []
-
     # Because gamesInCommon is a dictionary
     for games in gamesInCommon:
         gamesList = gamesInCommon[games]
@@ -171,3 +165,19 @@ def arrangeByCMM(gamesInCommon):
     # For future reference this is the first time I've ever used a lambda
 
     return possibleArbitrages
+
+orderedArbitrages = arrangeByCMM(allCommonGames)
+
+def outputWithInstructions(orderedArray):
+    print("Here are the 5 best Arbitrage Opportunities:")
+
+    for i in orderedArray[0:5]:
+        print("Using " + i.agencyA + " and " + i.agencyB)
+        print("For the game " + i.teamA + " vs " + i.teamB)
+        print("Gives a CMM of " + str(i.CMM))
+        print("So by betting " + str(individualBet(100, i.oddsA, i.CMM)) + "% of your investment on " + i.teamA)
+        print("And " + str(individualBet(100, i.oddsB, i.CMM)) + "% of your investment on " + i.teamB)
+        print("You can make a " + str(profit(100, i.CMM)) + "% profit.")
+
+outputWithInstructions(orderedArbitrages)
+
