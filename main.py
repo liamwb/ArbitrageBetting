@@ -1,12 +1,14 @@
 # Program for finding arbitrage opportunities
 # By Liam Wood-Baker, 2019
 
-
+import bs4  # BeautifulSoup is for data from websites
+from selenium import webdriver  # selenium is for accessing webpages
+from tkinter import *
+from tkinter.ttk import Combobox
 import NedsTennis
 import SportsBetTennis
 import LadbrokesTennis
-import bs4  # BeautifulSoup is for data from websites
-from selenium import webdriver  # selenium is for accessing webpages
+
 
 # Variables
 myDriver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
@@ -14,6 +16,7 @@ myDriver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/driv
 allGameObjects = []
 allCommonGames = []
 orderedArbitrages = []
+tennisAgencies = ["Sportsbet", "Neds", "Ladbrokes"]
 
 
 # Classes:
@@ -91,7 +94,6 @@ def createGameObjects(oddsA, oddsB, teamA, teamB, bettingAgency):
 
 
 # the url for SportsbetTennis is https://www.sportsbet.com.au/betting/sports-home/tennis
-
 def scrapeSportsBetTennis():
     soup = SportsBetTennis.getSoup(myDriver)
     oddsA, oddsB, teamA, teamB = SportsBetTennis.fillArrays(soup)
@@ -101,13 +103,13 @@ def scrapeSportsBetTennis():
     return gameObjects
 
 
-# the url for NedsTennisis https://www.neds.com.au/sports/tennis
-
+# the url for NedsTennis is https://www.neds.com.au/sports/tennis
 def scrapeNedsTennis():
     soup = NedsTennis.getSoup(myDriver)
     oddsA, oddsB, teamA, teamB = NedsTennis.fillArrays(soup)
     gameObjects = createGameObjects(oddsA, oddsB, teamA, teamB, "neds")
     return gameObjects
+
 
 def scrapeLadbrokesTennis():
     soup = LadbrokesTennis.getSoup(myDriver)
@@ -120,6 +122,7 @@ def scrapeLadbrokesTennis():
 allGameObjects.extend(scrapeNedsTennis())
 allGameObjects.extend(scrapeSportsBetTennis())
 allGameObjects.extend(scrapeLadbrokesTennis())
+
 
 def findGamesInCommon(gameObjects):
     dict = {}
@@ -175,7 +178,9 @@ def arrangeByCMM(gamesInCommon):
 
     return possibleArbitrages
 
+
 orderedArbitrages = arrangeByCMM(allCommonGames)
+
 
 def outputWithInstructions(orderedArray):
     print("Here are the 5 best Arbitrage Opportunities:")
@@ -188,5 +193,28 @@ def outputWithInstructions(orderedArray):
         print("And " + str(individualBet(100, i.oddsB, i.CMM)) + "% of your investment on " + i.teamB)
         print("You can make a " + str(profit(100, i.CMM)) + "% profit.")
 
+
 outputWithInstructions(orderedArbitrages)
 
+
+# ---------------------------------------------------------------------
+# GUI
+# ---------------------------------------------------------------------
+
+window = Tk()
+window.title("Arbitrage Betting")
+
+def callback(selection):
+    print("oho!")
+
+sportsComboLbl = Label(window, text="Select sport")
+sportsCombo = Combobox(values=["Tennis"])
+
+sportsCombo.bind("<<ComboboxSelected>>", callback)
+
+sportsComboLbl.grid(column=0, row=0)
+sportsCombo.grid(column=0, row=1)
+
+
+
+window.mainloop()
