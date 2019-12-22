@@ -20,7 +20,6 @@ def fillArrays(soup):
     arrayForNames = soup.find_all(class_="price-button-name")
 
     for i in range(0, len(arrayForNames)):
-        print("arrayForNames is " + str(len(arrayForNames)))
         # all the names are stored under this class, so teamA and teamB will alternate
         # names are formatted as follows:
         # <div class="price-button-name">
@@ -32,7 +31,6 @@ def fillArrays(soup):
 
         if i % 2 == 0:
             teamA.append(str(arrayForNames[i])[38:].split("<")[0].strip())
-            print(i)
         elif i % 2 == 1:
             teamB.append(str(arrayForNames[i])[38:].split("<")[0].strip())
 
@@ -49,8 +47,6 @@ def fillArrays(soup):
             oddsA.append(float(str(arrayForOdds[i]).split(">")[2][0:4]))
         elif i % 2 == 1:
             oddsB.append(float(str(arrayForOdds[i]).split(">")[2][0:4]))
-
-    print(oddsA, oddsB, teamA, teamB)
     return oddsA, oddsB, teamA, teamB
 
 
