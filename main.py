@@ -113,3 +113,27 @@ for i in allGameObjects:
 
 
 
+def findGamesInCommon(gameObjects):
+    dict = {}
+    for i in gameObjects:
+        #check if a game with the same gameID has already been added to dict
+        matchFound = False
+        currentGameID = i.gameID
+        # j is a gameID (one of the ones already added to dict, i is a Game object
+        for j in dict:
+            if currentGameID == j:
+                matchFound = True
+                break
+
+        if matchFound:
+            dict[currentGameID].append(i)
+        if not matchFound:
+            dict[currentGameID] = [i]
+
+    output = {}
+    for i in dict:
+        if len(dict[i]) > 1: # ie if there's more than one set of odds on a game
+            output[i] = dict[i]
+    # now dict contains only those games with more than one set of odds on them
+
+    return output
