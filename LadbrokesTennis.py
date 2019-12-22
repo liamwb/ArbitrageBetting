@@ -1,14 +1,14 @@
 # To scrape odds from ladbrokes for tennis
 
 import bs4
-from selenium import webdriver
 
-driver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
 
-url = "https://www.ladbrokes.com.au/sports/tennis"
-driver.get(url)
-content = driver.page_source
-soup = bs4.BeautifulSoup(content, features="html.parser")  # soup now contains the html behind url
+def getSoup(driver):
+    url = "https://www.ladbrokes.com.au/sports/tennis"
+    driver.get(url)
+    content = driver.page_source
+    soup = bs4.BeautifulSoup(content, features="html.parser")  # soup now contains the html behind url
+    return soup
 
 
 def fillArrays(soup):
@@ -19,7 +19,7 @@ def fillArrays(soup):
 
     arrayForNames = soup.find_all(class_="price-button-name")
 
-    for i in range(0, len(arrayForNames)-1):
+    for i in range(0, len(arrayForNames)):
         print("arrayForNames is " + str(len(arrayForNames)))
         # all the names are stored under this class, so teamA and teamB will alternate
         # names are formatted as follows:
@@ -53,7 +53,6 @@ def fillArrays(soup):
     print(oddsA, oddsB, teamA, teamB)
     return oddsA, oddsB, teamA, teamB
 
-oddsA, oddsB, teamA, teamB = fillArrays(soup)
 
 
 

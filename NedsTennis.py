@@ -1,7 +1,6 @@
 # To scrape data from Neds for tennis
 
 import bs4  # BeautifulSoup is for data from websites
-from selenium import webdriver  # selenium is for accessing webpages
 
 
 def getSoup(driver):

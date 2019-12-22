@@ -4,11 +4,13 @@
 
 import NedsTennis
 import SportsBetTennis
+import LadbrokesTennis
 import bs4  # BeautifulSoup is for data from websites
 from selenium import webdriver  # selenium is for accessing webpages
 
 # Variables
 myDriver = webdriver.Chrome("C:/Users/Liam/PycharmProjects/ArbitrageBetting/drivers/chromedriver.exe")
+# If someone else is using this, you'll have to install chromedriver and paste the path above
 allGameObjects = []
 allCommonGames = []
 orderedArbitrages = []
@@ -107,10 +109,17 @@ def scrapeNedsTennis():
     gameObjects = createGameObjects(oddsA, oddsB, teamA, teamB, "neds")
     return gameObjects
 
+def scrapeLadbrokesTennis():
+    soup = LadbrokesTennis.getSoup(myDriver)
+    oddsA, oddsB, teamA, teamB = LadbrokesTennis.fillArrays(soup)
+    gameObjects = createGameObjects(oddsA, oddsB, teamA, teamB, "ladbrokes")
+    return gameObjects
+
+
 # filling allGameObjects
 allGameObjects.extend(scrapeNedsTennis())
 allGameObjects.extend(scrapeSportsBetTennis())
-
+allGameObjects.extend(scrapeLadbrokesTennis())
 
 def findGamesInCommon(gameObjects):
     dict = {}
