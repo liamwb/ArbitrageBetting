@@ -52,6 +52,18 @@ class Game:
         self.impliedOddsA = 1 / oddsA
         self.impliedOddsB = 1 / oddsB
 
+        # to find different odds on the same game, each Game object will have a gameID made up of the
+        # last word of teamA + the last word of teamB, all in lowercase, with no spaces or punctuation.
+        # It seems unlikely that this will ever be non-unique.
+
+        idpartA = teamA.replace(".", " ").replace("-", " ").replace("/", " ").split()[-1].lower().strip()
+        idpartB = teamB.replace(".", " ").replace("-", " ").replace("/", " ").split()[-1].lower().strip()
+        self.gameID = idpartA + idpartB
+
+
+
+
+
 def createGameObjects(oddsA, oddsB, teamA, teamB, bettingAgency):
     gameObjects = []
     for i in range(0, len(teamA)):
@@ -98,3 +110,6 @@ allGameObjects.extend(scrapeSportsBetTennis())
 
 for i in allGameObjects:
     print(i.teamA + " vs " + i.teamB + " at " + str(i.oddsA) + " vs " + str(i.oddsB) + " through " + i.bettingAgency)
+
+
+
