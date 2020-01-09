@@ -200,21 +200,30 @@ outputWithInstructions(orderedArbitrages)
 # ---------------------------------------------------------------------
 # GUI
 # ---------------------------------------------------------------------
-
-window = Tk()
-window.title("Arbitrage Betting")
-
-def callback(selection):
-    print("oho!")
-
-sportsComboLbl = Label(window, text="Select sport")
-sportsCombo = Combobox(values=["Tennis"])
-
-sportsCombo.bind("<<ComboboxSelected>>", callback)
-
-sportsComboLbl.grid(column=0, row=0)
-sportsCombo.grid(column=0, row=1)
-
-
-
-window.mainloop()
+#
+# window = Tk()
+# window.title("Arbitrage Betting")
+#
+# def callback(selection):
+#     if selection == "Tennis":
+#         text = ""
+#         for i in tennisAgencies:
+#             text += i + " "
+#             text.strip
+#         agencyLbl.text = Label(window, text=)
+#
+#
+# sportsComboLbl = Label(window, text="Select sport")
+# sportsCombo = Combobox(values=["Tennis"])
+# agencyLbl = Label(window, text="Agencies: No sport selected")
+# btn = Button(window, text="Find Opportunities")
+#
+# sportsCombo.bind("<<ComboboxSelected>>", callback)
+#
+# sportsComboLbl.grid(column=0, row=0)
+# sportsCombo.grid(column=0, row=1)
+# agencyLbl.grid(column=0, row=2)
+#
+#
+#
+# window.mainloop()
